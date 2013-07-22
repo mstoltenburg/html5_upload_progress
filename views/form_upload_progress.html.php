@@ -132,24 +132,10 @@
 
 	};
 
-	var sendFile = function (file) {
+	var sendFile = function (file, item) {
 		var formData,
 			xhr,
-			item,
-			progress,
-			result;
-
-		item = $('<li class="h5up-item g-info">'
-			+ '<a class="close">&times;</a>'
-			+ file.name + ' - ' + pimpMyBytes(file.size)
-			+ '</li>');
-		progress = $('<progress min="0" max="100" value="0">0</progress>');
-		item.append(progress);
-		canvas.append(item);
-
-		previewFile(file, item);
-
-		return true;
+			progress = item.children('progress');
 
 		if (tests.formdata) {
 			formData = new FormData();
@@ -166,18 +152,19 @@
 			xhr = new XMLHttpRequest();
 			xhr.open('POST', '<?= url::site("uploader/add_photo/{$album->id}") ?>');
 			xhr.onload = function(event) {
-				// console.log(event);
+				item.removeData('xhr');
+				queue.next();
 				progress.attr({value: 100}).html(100);
 
 				switch (event.target.status) {
 					case 200:
-						item.slideUp("slow");
-						result = $('<li class="g-success">'
+						item.slideUp("slow", function(){ item.remove(); });
+						var result = $('<li class="g-success">'
 							+ '<a class="close">&times;</a>'
 							+ '<span>' + file.name + '</span> - '
 							+ <?= t("Completed")->for_js() ?> + '</li>');
 						status.append(result);
-						setTimeout(function() { result.slideUp("slow"); }, 5000);
+						setTimeout(function() { result.slideUp("slow", function(){ result.remove(); }); }, 5000);
 						break;
 
 					case 500:
@@ -200,12 +187,10 @@
 				}
 
 			};
-			// xhr.abort();
 
 			if (tests.progress) {
 				xhr.upload.onprogress = function (event) {
 					if (event.lengthComputable) {
-						// console.log(event);
 						var complete = (event.loaded / event.total * 100 | 0);
 						progress.attr({value: complete}).html(complete);
 					}
@@ -213,20 +198,82 @@
 			}
 
 			xhr.send(formData);
+			item.data('xhr', xhr);
 		}
 	}
 
-	// var queue = {};
-	// var addToQueue = function (file) {
+	var queue = {
+		count: 0,
+		items: {},
 
-	// };
+		size: function() {
+			var size = 0, key;
+			for (key in this.items) {
+				if (this.items.hasOwnProperty(key)) size++;
+			};
+			return size;
+		},
+
+		add: function(file) {
+			this.count++;
+			var item = $('<li class="h5up-item g-info">'
+				+ '<a data-id="' + this.count + '" class="close">&times;</a>'
+				+ file.name + ' - ' + pimpMyBytes(file.size)
+				+ '<progress min="0" max="100" value="0">0</progress>'
+				+ '</li>');
+			item.on('click', '.close', function(event){
+				event.preventDefault();
+				queue.remove($(this).data('id'));
+			});
+
+			canvas.append(item);
+
+			previewFile(file, item);
+
+			this.items[this.count] = item;
+
+			if (this.size() <= <?= $simultaneous_upload_limit ?>) {
+				sendFile(file, item);
+			} else {
+				item.data('pending', true);
+				item.data('file', file);
+			}
+		},
+
+		remove: function(key) {
+			var xhr = this.items[key].data('xhr');
+
+			if (xhr) {
+				xhr.abort();
+			}
+
+			this.items[key].remove();
+			delete this.items[key];
+			this.next();
+		},
+
+		next: function() {
+			var key;
+			for (key in this.items) {
+				if (this.items.hasOwnProperty(key) && this.items[key].data('pending')) {
+					this.items[key].removeData('pending')
+					sendFile(this.items[key].data('file'), this.items[key]);
+					return true;
+				}
+			};
+		},
+
+		clear: function() {
+			console.log(this.size());
+		}
+	};
 
 	var readFiles = function (files) {
 		for (var i = 0; i < files.length; i++) {
 			if (files[i].size > <?= $size_limit_bytes ?>) {
 				showError(files[i], <?= t("This photo is too large (max is %size bytes)", array("size" => $size_limit))->for_js() ?>);
 			} else {
-				sendFile(files[i]);
+				queue.add(files[i]);
 			}
 		}
 	};
@@ -248,9 +295,9 @@
 		// input.value = '';
 	};
 
-	status.click('.close', function(event){
+	status.on('click', '.close', function(event){
 		event.preventDefault();
-		$(event.target).parent().remove();
+		$(this).parent().remove();
 	});
 
 })(jQuery);

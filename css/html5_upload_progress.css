@@ -1,16 +1,15 @@
-label { clear: both; }
 .g-message-block:empty {
-  display: none;
+	display: none;
 }
 #g-add-photos-canvas {
-  padding: 0;
+	padding: 0;
 }
 #h5up-dropzone {
-  border-radius: 2em;
-  border: 10px solid #ccc;
-  line-height: 3em;
-  margin: .5em 0;
-  text-align: center;
+	border-radius: 2em;
+	border: 10px solid #ccc;
+	line-height: 3em;
+	margin: .5em 0;
+	text-align: center;
 }
 #h5up-dropzone.hover { border-color: #5382BF; } /* #2E6E9E */
 #h5up-dropzone img { display: block; margin: 10px auto; }
@@ -19,45 +18,49 @@ progress { width: 50%; }
 progress:after { content: '%'; }
 .hidden { display: none !important;}
 .close {
-  float: right;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: bold;
-  font-size: 1.375em;
-  line-height: .7;
-  text-decoration: none !important;
-  opacity: .3;
+	float: right;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	font-size: 1.375em;
+	line-height: .7;
+	text-decoration: none !important;
+	opacity: .3;
 }
 .close:hover {
-  text-decoration: none !important;
-  opacity: .5;
+	text-decoration: none !important;
+	opacity: .5;
 }
 .h5up-item img {
-  height: 1.5em;
-  vertical-align: middle;
-  margin-right: 5px;
+	height: 1.5em;
+	vertical-align: middle;
+	margin-right: 5px;
 }
 #g-add-photos-canvas,
 #g-add-photos-status {
-  height: auto;
-  max-height: 150px;
+	height: auto;
+	max-height: 150px;
 }
 /*
 #g-dialog #g-add-photos-status li {
-  width: 100%;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+	width: 100%;
+	-webkit-box-sizing: border-box;
+		 -moz-box-sizing: border-box;
+					box-sizing: border-box;
 }
 */
 
 /* override */
 
 #g-dialog .g-message-block li {
-  margin: 1px 0;
-  padding: .3em .5em .3em 2em;
-  float: none;
+	margin: 1px 0 0 0;
+	padding: .3em .5em .3em 2em;
+	float: none;
+}
+
+#g-dialog .g-message-block li:first-child {
+	margin-top: 0;
 }
 
 #g-dialog .g-message-block .g-info {
-  padding-left: .5em;
+	padding-left: .5em;
 }
