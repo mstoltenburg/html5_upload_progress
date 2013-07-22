@@ -19,6 +19,6 @@
  */
 class html5_upload_progress_theme_Core {
 	static function head($theme) {
-		return $theme->css("html5_upload_progress.css");
+		return $theme->css('html5_upload_progress.css') . $theme->script('html5_upload_progress.js');
 	}
 }
