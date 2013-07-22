@@ -153,7 +153,7 @@
 			xhr.open('POST', '<?= url::site("uploader/add_photo/{$album->id}") ?>');
 			xhr.onload = function(event) {
 				item.removeData('xhr');
-				queue.next();
+				queue.remove(item.data('id'));
 				progress.attr({value: 100}).html(100);
 
 				switch (event.target.status) {
@@ -216,7 +216,7 @@
 
 		add: function(file) {
 			this.count++;
-			var item = $('<li class="h5up-item g-info">'
+			var item = $('<li data-id="' + this.count + '" class="h5up-item g-info">'
 				+ '<a data-id="' + this.count + '" class="close">&times;</a>'
 				+ file.name + ' - ' + pimpMyBytes(file.size)
 				+ '<progress min="0" max="100" value="0">0</progress>'
