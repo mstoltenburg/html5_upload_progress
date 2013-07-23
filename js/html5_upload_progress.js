@@ -56,12 +56,15 @@
 	};
 
 	function previewFile (file, item) {
-		if (tests.filereader === true && acceptedTypes[file.type] === true) {
+		if (input.form.elements.show_preview.checked
+			&& tests.filereader === true
+			&& acceptedTypes[file.type] === true)
+		{
 			var reader = new FileReader();
 			reader.onload = function (event) {
 				var image = new Image();
 				image.src = event.target.result;
-				image.height = 24; // a fake resize
+				image.height = 48; // a fake resize
 				item.prepend(image);
 			};
 
@@ -243,6 +246,7 @@
 			if (tests.dragdrop) {
 				dropzone.ondragover = function () { this.className = 'hover'; return false; };
 				dropzone.ondragend = function () { this.className = ''; return false; };
+				dropzone.ondragleave = function () { this.className = ''; return false; };
 				dropzone.ondrop = function (e) {
 					this.className = '';
 					e.preventDefault();

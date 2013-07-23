@@ -95,18 +95,19 @@ class Uploader_Controller extends Controller {
 		$form->hidden('g3sid')->value(Session::instance()->id());
 		$form->hidden('user_agent')->value(Input::instance()->server("HTTP_USER_AGENT"));
 		$group = $form->group("add_photos")
-			->label(t("Add photos to %album_title", array("album_title" => html::purify($album->title))));
+		              ->label(t("Add photos to %album_title", array("album_title" => html::purify($album->title))));
 
 		$group->upload_progress("upload_progress")->album($album);
+		$group->checkbox("show_preview")
+		      ->label(t("Show file preview"))
+		      ->checked(false);
 
 		module::event("add_photos_form", $album, $form);
 
 		$group = $form->group("buttons")->label("");
 		$group->submit("")->value(t("Upload"));
-		$group->button("")->value(t("Done"))->id("g-upload-done");
-		$group->button("")->value(t("Cancel uploads"))->id("g-upload-cancel-all");
-		// $form->script("")
-		// 	->url(url::abs_file("modules/gallery/js/albums_form_add.js"));
+		// $group->button("")->value(t("Done"))->id("g-upload-done");
+		// $group->button("")->value(t("Cancel uploads"))->id("g-upload-cancel-all");
 
 		return $form;
 	}
