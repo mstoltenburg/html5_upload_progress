@@ -104,8 +104,10 @@ class Uploader_Controller extends Controller {
 
 		module::event("add_photos_form", $album, $form);
 
-		$group = $form->group("buttons")->label("");
-		$group->submit("")->value(t("Upload"));
+		$group_actions = $form->group("actions");
+		$group_actions->upload_progress_buttons("");
+		// $group = $form->group("buttons")->label("");
+		// $group->submit("")->value(t("Upload"));
 		// $group->button("")->value(t("Done"))->id("g-upload-done");
 		// $group->button("")->value(t("Cancel uploads"))->id("g-upload-cancel-all");
 

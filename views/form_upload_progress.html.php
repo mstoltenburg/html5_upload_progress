@@ -47,6 +47,7 @@
 
 $('#h5up-input').h5up({
 	url: '<?= url::site("uploader/add_photo/{$album->id}") ?>',
+	status: '<?= url::site("uploader/status/_S/_E") ?>',
 	messages: {
 		200: <?= t("Completed")->for_js() ?>,
 		400: <?= str_replace(' bytes)', ')', t("This photo is too large (max is %size bytes)", array("size" => html5_upload_progress::pimp_my_bytes($size_limit_bytes)))->for_js()) ?>,

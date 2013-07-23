@@ -28,14 +28,13 @@ input[type="file"] {
 
 }
 #h5up-dropzone.hover { border-color: #5382BF; background-color:#2E6E9E; } /* #2E6E9E */
-#h5up-dropzone img { display: block; margin: 10px auto; }
 #h5up-dropzone p { margin: 10px; font-size: 14px; }
 progress {
 	width: 86%;
 	border: 1px solid #ccc;
+	border-radius: 1em;
 	background: #fff;
 	padding: 1px;
-	border-radius: 1em;
 /*	-webkit-appearance: none;
 	   -moz-appearance: none;
 */
@@ -48,23 +47,31 @@ progress::-webkit-progress-value {
 	background: #5382BF;
 	border-radius: 1em;
 }
-/* FF bug: needs extra statement */
 progress::-moz-progress-bar {
 	background: #5382BF;
 	border-radius: 1em;
 }
 progress:indeterminate::-webkit-progress-bar {
-	border-radius: 1em;
 	background-color: #5382BF;
-	background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 16px, rgba(255,255,255,.5) 16px, rgba(255,255,255,.5) 32px);
-	background-image: repeating-linear-gradient(-45deg, transparent, transparent 16px, rgba(255,255,255,.5) 16px, rgba(255,255,255,.5) 32px);
+	background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 1em, rgba(255,255,255,.5) 1em, rgba(255,255,255,.5) 2em);
+	-webkit-animation: gradient_pan 3s infinite linear;
 }
-/* FF bug: needs extra statement */
 progress:indeterminate::-moz-progress-bar {
-	border-radius: 1em;
 	background-color: #5382BF;
-	background-image: repeating-linear-gradient(-45deg, transparent, transparent 16px, rgba(255,255,255,.5) 16px, rgba(255,255,255,.5) 32px);
+	background-image: repeating-linear-gradient(-45deg, transparent, transparent 1em, rgba(255,255,255,.5) 1em, rgba(255,255,255,.5) 2em);
+	animation: gradient_pan 3s infinite linear;
 }
+
+@-webkit-keyframes gradient_pan {
+	0%   { background-position: 0px 0px; }
+	100% { background-position: 20em 0em; }
+}
+
+@keyframes gradient_pan {
+	0%   { background-position: 0px 0px; }
+	100% { background-position: 20em 0em; }
+}
+
 .hidden { display: none !important;}
 .close {
 	float: right;
@@ -92,6 +99,9 @@ progress:indeterminate::-moz-progress-bar {
 #g-add-photos-status {
 	height: auto;
 	max-height: 150px;
+}
+#g-add-photos-status-message {
+	padding-top: 3px;
 }
 /*
 #g-dialog #g-add-photos-status li {

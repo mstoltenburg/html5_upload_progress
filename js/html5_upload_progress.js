@@ -4,7 +4,10 @@
 	var input,
 		canvas,
 		status,
+		message,
 		settings,
+		success = 0,
+		errors = 0,
 		defaults = {
 			animationSpeed: 'slow'
 		},
@@ -98,6 +101,7 @@
 
 				switch (event.target.status) {
 					case 200:
+						success++;
 						var result = $('<li class="g-success">'
 							+ '<a class="close">&times;</a>'
 							+ '<span>' + file.name + '</span> - '
@@ -107,28 +111,25 @@
 						break;
 
 					case 500:
-						showError(file, settings.messages[500]);
-						break;
-
 					case 404:
-						showError(file, settings.messages[404]);
-						break;
-
 					case 400:
-						showError(file, settings.messages[400]);
+						errors++;
+						showError(file, settings.messages[event.target.status]);
 						break;
 
 					default:
+						errors++;
 						showError(file, settings.messages['default']
 												.replace("__INFO__", event.target.status)
 												.replace("__TYPE__", event.target.status)); // nonsense, but I can't see where the error should come from
 						break;
 				}
 
+				updateStatus();
 			};
 			xhr.onabort = function(event) {
-				item.prop({className: 'g-warning'});
 				progress.removeAttr('value');
+				item.prop({className: 'g-warning'}).clone().appendTo(status);
 			};
 
 			if (tests.progress) {
@@ -153,6 +154,14 @@
 				queue.add(files[i]);
 			}
 		}
+	};
+
+	function updateStatus () {
+		$.get(settings.status.replace("_S", success).replace("_E", errors),
+			function(data) {
+				message.html(data);
+			}
+		);
 	};
 
 	var queue = {
@@ -231,6 +240,7 @@
 			input = document.getElementById('h5up-input');
 			canvas = $('#g-add-photos-canvas');
 			status = $('#g-add-photos-status');
+			message = $('#g-add-photos-status-message');
 
 			var dropzone = document.getElementById('h5up-dropzone'),
 				messages = $('#h5up-action-status'),
