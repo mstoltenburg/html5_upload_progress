@@ -129,7 +129,7 @@
 			};
 			xhr.onabort = function(event) {
 				progress.removeAttr('value');
-				item.prop({className: 'g-warning'}).clone().appendTo(status);
+				item.prop({className: 'g-warning'}); //.clone().appendTo(status);
 			};
 
 			if (tests.progress) {
