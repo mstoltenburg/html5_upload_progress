@@ -1,4 +1,4 @@
-html5_upload_progress
+HTML5 upload progress
 =====================
 
-HTML5 file upload for Gallery with drag and drop support and XHR upload with upload progress
+HTML5 file upload module for [Gallery 3](http://galleryproject.org) with drag and drop support, file preview and XHR upload with upload progress
