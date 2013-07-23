@@ -23,7 +23,8 @@ input[type="file"] {
 */
 
 	background-color: #dcdcdc;
-	background-image: repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px);
+	background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px);
+	background-image:         repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px);
 
 }
 #h5up-dropzone.hover { border-color: #5382BF; background-color:#2E6E9E; } /* #2E6E9E */
@@ -34,16 +35,35 @@ progress {
 	border: 1px solid #ccc;
 	background: #fff;
 	padding: 1px;
+	border-radius: 1em;
 /*	-webkit-appearance: none;
 	   -moz-appearance: none;
 */
 }
 progress::-webkit-progress-bar {
 	background: #fff;
+	border-radius: 1em;
 }
-progress::-webkit-progress-value,
+progress::-webkit-progress-value {
+	background: #5382BF;
+	border-radius: 1em;
+}
+/* FF bug: needs extra statement */
 progress::-moz-progress-bar {
 	background: #5382BF;
+	border-radius: 1em;
+}
+progress:indeterminate::-webkit-progress-bar {
+	border-radius: 1em;
+	background-color: #5382BF;
+	background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 16px, rgba(255,255,255,.5) 16px, rgba(255,255,255,.5) 32px);
+	background-image: repeating-linear-gradient(-45deg, transparent, transparent 16px, rgba(255,255,255,.5) 16px, rgba(255,255,255,.5) 32px);
+}
+/* FF bug: needs extra statement */
+progress:indeterminate::-moz-progress-bar {
+	border-radius: 1em;
+	background-color: #5382BF;
+	background-image: repeating-linear-gradient(-45deg, transparent, transparent 16px, rgba(255,255,255,.5) 16px, rgba(255,255,255,.5) 32px);
 }
 .hidden { display: none !important;}
 .close {
@@ -59,7 +79,7 @@ progress::-moz-progress-bar {
 	text-decoration: none !important;
 	opacity: .5;
 }
-.h5up-item img {
+#g-add-photos-canvas img {
 	height: 2.4em;
 	vertical-align: middle;
 	margin-right: .5em;
@@ -94,6 +114,6 @@ progress::-moz-progress-bar {
 	margin-top: 0;
 }
 
-#g-dialog .g-message-block .g-info {
+#g-add-photos-canvas.g-message-block li {
 	padding-left: .5em;
 }

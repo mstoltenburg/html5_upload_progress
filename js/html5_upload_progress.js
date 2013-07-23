@@ -43,7 +43,7 @@
 
 		float = Math.round(float * round) / round;
 
-		return float + ' ' + unit;
+		return float + ' ' + unit;
 	};
 
 	function showError (file, msg) {
@@ -120,11 +120,15 @@
 
 					default:
 						showError(file, settings.messages['default']
-	                        .replace("__INFO__", event.target.status)
-	                        .replace("__TYPE__", event.target.status)); // nonsense, but I can't see where the error should come from
+												.replace("__INFO__", event.target.status)
+												.replace("__TYPE__", event.target.status)); // nonsense, but I can't see where the error should come from
 						break;
 				}
 
+			};
+			xhr.onabort = function(event) {
+				item.prop({className: 'g-warning'});
+				progress.removeAttr('value');
 			};
 
 			if (tests.progress) {
@@ -165,10 +169,10 @@
 
 		add: function(file) {
 			this.count++;
-			var item = $('<li data-id="' + this.count + '" class="h5up-item g-info">'
+			var item = $('<li data-id="' + this.count + '" class="g-info">'
 				+ '<a class="close">&times;</a>'
 				+ file.name + ' - ' + pimpMyBytes(file.size)
-				+ '<progress min="0" max="100" value="0">0</progress>'
+				+ '<progress min="0" max="100"></progress>'
 				+ '</li>');
 			item.on('click', '.close', {id: this.count}, function(event){
 				event.preventDefault();
@@ -190,15 +194,19 @@
 		},
 
 		remove: function(key) {
-			var xhr = this.items[key].data('xhr');
+			if (this.items[key]) {
+				var xhr = this.items[key].data('xhr');
 
-			if (xhr) {
-				xhr.abort();
+				if (xhr) {
+					xhr.abort();
+				}
+
+				this.items[key].slideUp(settings.animationSpeed, function(){ $(this).remove(); });
+				// this.items[key].remove();
+
+				delete this.items[key];
 			}
 
-			this.items[key].slideUp(settings.animationSpeed, function(){ $(this).remove(); });
-			// this.items[key].remove();
-			delete this.items[key];
 			this.next();
 		},
 
