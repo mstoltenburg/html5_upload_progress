@@ -32,26 +32,18 @@ input[type="file"] {
 progress {
 	width: 86%;
 	border: 1px solid #ccc;
-	border-radius: 1em;
 	background: #fff;
 	padding: 1px;
-	position: relative;
-	display: inline;
-}
-progress:after {
-	content: attr(value) "%";
-	position: absolute;
-	right: 0;
-	too: 0;
+/*	-webkit-appearance: none;
+	   -moz-appearance: none;
+*/
 }
 progress::-webkit-progress-bar {
-	border-radius: 1em;
 	background: #fff;
 }
 progress::-webkit-progress-value,
 progress::-moz-progress-bar {
-	background-color: #5382BF;
-	border-radius: 1em;
+	background: #5382BF;
 }
 .hidden { display: none !important;}
 .close {
