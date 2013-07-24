@@ -46,8 +46,8 @@
 <script>
 
 $('#h5up-input').h5up({
-	url: '<?= url::site("uploader/add_photo/{$album->id}") ?>',
-	status: '<?= url::site("uploader/status/_S/_E") ?>',
+	url: <?= html::js_string(url::site("uploader/add_photo/{$album->id}")) ?>,
+	statusUrl: <?= html::js_string(url::site("uploader/status/_S/_E")) ?>,
 	messages: {
 		200: <?= t("Completed")->for_js() ?>,
 		400: <?= str_replace(' bytes)', ')', t("This photo is too large (max is %size bytes)", array("size" => html5_upload_progress::pimp_my_bytes($size_limit_bytes)))->for_js()) ?>,
@@ -55,9 +55,8 @@ $('#h5up-input').h5up({
 		500: <?= t("Unable to process this photo")->for_js() ?>,
 		default: <?= t("Server error: __INFO__ (__TYPE__)")->for_js() ?>
 	},
-	sizeLimit: <?= $size_limit_bytes ?>,
-	requestLimit: <?= $simultaneous_upload_limit ?>
-
+	sizeLimit: <?= (int) $size_limit_bytes ?>,
+	requestLimit: <?= (int) $simultaneous_upload_limit ?>
 });
 
 </script>
