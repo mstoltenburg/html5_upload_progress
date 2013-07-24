@@ -59,7 +59,7 @@
 		},
 
 		_create: function() {
-			this.input = document.getElementById('h5up-input');
+			this.input = this.element.get(0);
 			this.canvas = $('#g-add-photos-canvas');
 			this.status = $('#g-add-photos-status');
 			this.message = $('#g-add-photos-status-message');
