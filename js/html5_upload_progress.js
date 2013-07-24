@@ -108,11 +108,11 @@
 		},
 
 		_init: function() {
-			console.log('init');
+			// console.log('init');
 		},
 
 		_destroy: function() {
-			console.log('destroy');
+			// console.log('destroy');
 			this.queue.clear();
 		},
 
@@ -312,7 +312,7 @@
 		},
 
 		cancel: function() {
-			console.log('cancel');
+			// console.log('cancel');
 			this.queue.clear();
 		}
 
