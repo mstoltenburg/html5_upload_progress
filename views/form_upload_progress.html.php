@@ -53,7 +53,7 @@ $('#h5up-input').h5up({
 		400: <?= str_replace(' bytes)', ')', t("This photo is too large (max is %size bytes)", array("size" => html5_upload_progress::pimp_my_bytes($size_limit_bytes)))->for_js()) ?>,
 		404: <?= t("The upload script was not found")->for_js() ?>,
 		500: <?= t("Unable to process this photo")->for_js() ?>,
-		default: <?= t("Server error: __INFO__ (__TYPE__)")->for_js() ?>
+		'default': <?= t("Server error: __INFO__ (__TYPE__)")->for_js() ?>
 	},
 	sizeLimit: <?= (int) $size_limit_bytes ?>,
 	requestLimit: <?= (int) $simultaneous_upload_limit ?>
