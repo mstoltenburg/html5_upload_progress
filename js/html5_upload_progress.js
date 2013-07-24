@@ -68,15 +68,21 @@
 				dropzone = document.getElementById('h5up-dropzone'),
 				messages = $('#h5up-action-status'),
 				alerts = {
-					filereader: $('#h5up-filereader'),
-					dragdrop: $('#h5up-dragdrop'),
-					formdata: $('#h5up-formdata'),
-					progress: $('#h5up-progress')
+					filereader: '#h5up-filereader',
+					dragdrop: '#h5up-dragdrop',
+					formdata: '#h5up-formdata',
+					progress: '#h5up-progress'
 				};
 
 			for (var api in alerts) {
 				if (tests[api] !== false) {
-					alerts[api].remove();
+					$(alerts[api]).remove();
+				} else {
+					switch (api) {
+						case 'filereader':
+							this.input.form.elements.show_preview.disabled = true;
+							break;
+					}
 				}
 			}
 
@@ -190,7 +196,7 @@
 				xhr.onload = function(event) {
 					item.removeData('xhr');
 					self._removeFile(item.data('id'));
-					progress.attr({value: 100}).html(100);
+					if (progress) { progress.attr({value: 100}).html(100); }
 
 					switch (event.target.status) {
 						case 200:
@@ -221,7 +227,7 @@
 					self._updateStatus();
 				};
 				xhr.onabort = function() {
-					progress.removeAttr('value');
+					if (progress) { progress.removeAttr('value'); }
 					item.prop({className: 'g-warning'});
 				};
 
@@ -258,10 +264,11 @@
 			this.queue.count++;
 
 			var self = this,
+				progress = (tests.progress) ? '<progress min="0" max="100"></progress>' : '',
 				item = $('<li data-id="' + this.queue.count + '" class="g-info">' +
 				'<a class="close">&times;</a>' +
 				file.name + ' - ' + this._pimpMyBytes(file.size) +
-				'<progress min="0" max="100"></progress>' +
+				progress +
 				'</li>');
 
 			item.on('click', '.close', {id: this.queue.count}, function(event){
