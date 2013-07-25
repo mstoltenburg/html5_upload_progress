@@ -29,19 +29,8 @@
 		message: null,
 		success: 0,
 		errors: 0,
-
-		queue: {
-			count: 0,
-			items: {},
-
-			size: function() {
-				var size = 0, key;
-				for (key in this.items) {
-					if (this.items.hasOwnProperty(key)) { size++; }
-				}
-				return size;
-			}
-		},
+		queueCount: 0,
+		items: $(),
 
 		_create: function() {
 			this.input = this.element.get(0);
@@ -248,11 +237,11 @@
 		},
 
 		_addFile: function(file) {
-			this.queue.count++;
+			this.queueCount++;
 
 			var self = this,
 				progress = (tests.progress) ? '<progress min="0" max="100"></progress>' : '',
-				item = $('<li data-id="' + this.queue.count + '" class="g-info">' +
+				item = $('<li data-id="' + this.queueCount + '" class="g-info">' +
 				'<a class="close">&times;</a>' +
 				file.name + ' - ' + this._pimpMyBytes(file.size) +
 				progress +
