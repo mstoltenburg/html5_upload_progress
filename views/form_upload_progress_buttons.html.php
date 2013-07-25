@@ -1,6 +1,6 @@
 <?php defined("SYSPATH") or die("No direct script access.") ?>
 
-<button type="submit" class="ui-state-default ui-corner-all">
+<button type="submit" class="ui-state-default ui-corner-all" onclick="$(this.form).submit(); return false;">
 <?= t("Done") ?>
 </button>
 
