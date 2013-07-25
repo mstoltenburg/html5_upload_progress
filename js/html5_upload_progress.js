@@ -171,6 +171,7 @@
 				xhr.open('POST', this.options.url);
 				xhr.onload = function(event) {
 					item.removeData('xhr');
+					console.log('remove on load', item);
 					self._removeFile(item);
 					if (progress) { progress.attr({value: 100}).html(100); }
 
@@ -241,7 +242,7 @@
 
 			var self = this,
 				progress = (tests.progress) ? '<progress min="0" max="100"></progress>' : '',
-				item = $('<li data-id="' + this.queueCount + '" class="g-info">' +
+				item = $('<li id="up-' + this.queueCount + '" data-id="' + this.queueCount + '" class="g-info">' +
 				'<a class="close">&times;</a>' +
 				file.name + ' - ' + this._pimpMyBytes(file.size) +
 				progress +
@@ -249,6 +250,7 @@
 
 			item.one('click', '.close', function(event){
 				event.preventDefault();
+				console.log('remove by click', item);
 				self._removeFile(item);
 			});
 
