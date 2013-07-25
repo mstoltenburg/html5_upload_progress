@@ -25,6 +25,7 @@
 		input: null,
 		canvas: null,
 		status: null,
+		button: null,
 		message: null,
 		success: 0,
 		errors: 0,
@@ -39,22 +40,6 @@
 					if (this.items.hasOwnProperty(key)) { size++; }
 				}
 				return size;
-			},
-
-			clear: function() {
-				var key, xhr;
-
-				for (key in this.items) {
-					xhr = this.items[key].data('xhr');
-
-					if (xhr) {
-						xhr.abort();
-					}
-
-					this.items[key].remove();
-
-					delete this.items[key];
-				}
 			}
 		},
 
@@ -62,6 +47,7 @@
 			this.input = this.element.get(0);
 			this.canvas = $('#g-add-photos-canvas');
 			this.status = $('#g-add-photos-status');
+			this.button = $(this.input.form.elements.cancel);
 			this.message = $('#g-add-photos-status-message');
 
 			var self = this,
@@ -115,11 +101,12 @@
 
 		_init: function() {
 			// console.log('init');
+			this.button.prop('disabled', true);
 		},
 
 		_destroy: function() {
 			// console.log('destroy');
-			this.queue.clear();
+			this._clearQueue();
 		},
 
 		_pimpMyBytes: function(bytes) {
@@ -277,6 +264,7 @@
 			});
 
 			this.canvas.append(item);
+			this.button.prop('disabled', false);
 
 			this._previewFile(file, item);
 
@@ -304,7 +292,11 @@
 				delete this.queue.items[key];
 			}
 
-			this._next();
+			if (this.queue.size()) {
+				this._next();
+			} else {
+				this.button.prop('disabled', true);
+			}
 		},
 
 		_next: function() {
@@ -318,9 +310,29 @@
 			}
 		},
 
+		_clearQueue: function() {
+			var key, xhr;
+
+			for (key in this.queue.items) {
+				xhr = this.queue.items[key].data('xhr');
+
+				if (xhr) {
+					xhr.abort();
+				} else {
+					this.queue.items[key].children('progress').val(0);
+				}
+
+				this.queue.items[key].fadeOut(1500, function(){ $(this).remove(); });
+				// this.queue.items[key].remove();
+			}
+
+			this.queue.items = {};
+			this.button.prop('disabled', true);
+		},
+
 		cancel: function() {
 			// console.log('cancel');
-			this.queue.clear();
+			this._clearQueue();
 		}
 
 	});
