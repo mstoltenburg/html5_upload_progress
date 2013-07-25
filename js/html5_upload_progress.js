@@ -182,7 +182,7 @@
 				xhr.open('POST', this.options.url);
 				xhr.onload = function(event) {
 					item.removeData('xhr');
-					self._removeFile(item.data('id'));
+					self._removeFile(item);
 					if (progress) { progress.attr({value: 100}).html(100); }
 
 					switch (event.target.status) {
@@ -258,9 +258,9 @@
 				progress +
 				'</li>');
 
-			item.on('click', '.close', {id: this.queue.count}, function(event){
+			item.one('click', '.close', function(event){
 				event.preventDefault();
-				self._removeFile(event.data.id);
+				self._removeFile(item);
 			});
 
 			this.canvas.append(item);
@@ -268,9 +268,9 @@
 
 			this._previewFile(file, item);
 
-			this.queue.items[this.queue.count] = item;
+			this.items = this.items.add(item);
 
-			if (this.queue.size() <= this.options.requestLimit) {
+			if (this.items.length <= this.options.requestLimit) {
 				this._sendFile(file, item);
 			} else {
 				item.data('pending', true);
@@ -278,21 +278,23 @@
 			}
 		},
 
-		_removeFile: function(key) {
-			if (this.queue.items[key]) {
-				var xhr = this.queue.items[key].data('xhr');
+		_removeFile: function(item) {
+			console.log(this.items, item);
+
+			if (this.items.is(item)) {
+				var xhr = item.data('xhr');
 
 				if (xhr) {
 					xhr.abort();
 				}
 
-				this.queue.items[key].slideUp(this.options.animationSpeed, function(){ $(this).remove(); });
-				// this.queue.items[key].remove();
+				item.slideUp(this.options.animationSpeed, function(){ $(this).remove(); });
+				// item.remove();
 
-				delete this.queue.items[key];
+				this.items = this.items.not(item);
 			}
 
-			if (this.queue.size()) {
+			if (this.items.length) {
 				this._next();
 			} else {
 				this.button.prop('disabled', true);
@@ -300,33 +302,29 @@
 		},
 
 		_next: function() {
-			var key;
-			for (key in this.queue.items) {
-				if (this.queue.items.hasOwnProperty(key) && this.queue.items[key].data('pending')) {
-					this.queue.items[key].removeData('pending');
-					this._sendFile(this.queue.items[key].data('file'), this.queue.items[key]);
-					return true;
-				}
+			var item = this.items.filter(':data(pending)').first();
+
+			if (item) {
+				item.removeData('pending');
+				this._sendFile(item.data('file'), item);
+				return true;
 			}
 		},
 
 		_clearQueue: function() {
-			var key, xhr;
+			this.items.children('progress').val(0);
 
-			for (key in this.queue.items) {
-				xhr = this.queue.items[key].data('xhr');
+			this.items.each(function(key) {
+				var xhr = $(this).data('xhr');
 
 				if (xhr) {
 					xhr.abort();
-				} else {
-					this.queue.items[key].children('progress').val(0);
 				}
+			});
 
-				this.queue.items[key].fadeOut(1500, function(){ $(this).remove(); });
-				// this.queue.items[key].remove();
-			}
-
-			this.queue.items = {};
+			this.items.fadeOut(this.options.animationSpeed, function(){ $(this).remove(); });
+			// this.items.remove();
+			this.items = $();
 			this.button.prop('disabled', true);
 		},
 
