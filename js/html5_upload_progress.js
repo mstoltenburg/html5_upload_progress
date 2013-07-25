@@ -279,8 +279,12 @@
 		},
 
 		_removeFile: function(key) {
+			var pending = false,
+				xhr;
+
 			if (this.queue.items[key]) {
-				var xhr = this.queue.items[key].data('xhr');
+				pending = this.queue.items[key].data('pending');
+				xhr = this.queue.items[key].data('xhr');
 
 				if (xhr) {
 					xhr.abort();
@@ -293,7 +297,9 @@
 			}
 
 			if (this.queue.size()) {
-				this._next();
+				if (!pending) {
+					this._next();
+				}
 			} else {
 				this.button.prop('disabled', true);
 			}
