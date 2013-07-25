@@ -291,7 +291,6 @@
 				}
 
 				this.queue.items[key].slideUp(this.options.animationSpeed, function(){ $(this).remove(); });
-				// this.queue.items[key].remove();
 
 				delete this.queue.items[key];
 			}
@@ -328,8 +327,7 @@
 					this.queue.items[key].children('progress').val(0);
 				}
 
-				this.queue.items[key].fadeOut(1500, function(){ $(this).remove(); });
-				// this.queue.items[key].remove();
+				this.queue.items[key].fadeOut(this.options.animationSpeed, function(){ $(this).remove(); });
 			}
 
 			this.queue.items = {};
