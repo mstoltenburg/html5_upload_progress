@@ -22,6 +22,7 @@
 			animationSpeed: 'slow'
 		},
 
+		created: false,
 		input: null,
 		canvas: null,
 		status: null,
@@ -47,7 +48,7 @@
 			this.input = this.element.get(0);
 			this.canvas = $('#g-add-photos-canvas');
 			this.status = $('#g-add-photos-status');
-			this.button = $(this.input.form.elements.cancel);
+			this.button = this.input.form.elements.cancel;
 			this.message = $('#g-add-photos-status-message');
 
 			var self = this,
@@ -93,19 +94,22 @@
 				self._readFiles(this.files);
 			};
 
-			this.status.on('click', '.close', function(event){
+			this.status.click(function(event){
 				event.preventDefault();
-				$(this).parent().remove();
+				if (event.target.className === 'close') {
+					$(event.target).parent().remove();
+				}
 			});
+
+			this.created = true;
 		},
 
 		_init: function() {
-			// console.log('init');
-			this.button.prop('disabled', true);
+			if (!this.created) { this._create(); } // bc for jqeury UI 1.7.2
+			this.button.disabled = true;
 		},
 
 		_destroy: function() {
-			// console.log('destroy');
 			this._clearQueue();
 		},
 
@@ -182,7 +186,7 @@
 				xhr.open('POST', this.options.url);
 				xhr.onload = function(event) {
 					item.removeData('xhr');
-					self._removeFile(item.data('id'));
+					self._removeFile(item.attr('data-id'));
 					if (progress) { progress.attr({value: 100}).html(100); }
 
 					switch (event.target.status) {
@@ -215,7 +219,7 @@
 				};
 				xhr.onabort = function() {
 					if (progress) { progress.removeAttr('value'); }
-					item.prop({className: 'g-warning'});
+					item.get(0).className = 'g-warning';
 				};
 
 				if (tests.progress) {
@@ -258,13 +262,15 @@
 				progress +
 				'</li>');
 
-			item.on('click', '.close', {id: this.queue.count}, function(event){
+			item.click(function(event){
 				event.preventDefault();
-				self._removeFile(event.data.id);
+				if (event.target.className === 'close') {
+					self._removeFile(this.getAttribute('data-id'));
+				}
 			});
 
 			this.canvas.append(item);
-			this.button.prop('disabled', false);
+			this.button.disabled = false;
 
 			this._previewFile(file, item);
 
@@ -300,7 +306,7 @@
 					this._next();
 				}
 			} else {
-				this.button.prop('disabled', true);
+				this.button.disabled = true;
 			}
 		},
 
@@ -331,11 +337,10 @@
 			}
 
 			this.queue.items = {};
-			this.button.prop('disabled', true);
+			this.button.disabled = true;
 		},
 
 		cancel: function() {
-			// console.log('cancel');
 			this._clearQueue();
 		}
 
