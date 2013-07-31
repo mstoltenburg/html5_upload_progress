@@ -1,6 +1,11 @@
 (function ($) {
 	'use strict';
 
+	// bugfix for JS code in tag_event::add_photos_form()
+	if (!$.fn.uploadifySettings) {
+		$.fn.uploadifySettings = function() {};
+	}
+
 	var tests = {
 			filereader: typeof FileReader !== 'undefined',
 			dragdrop: 'draggable' in document.createElement('span'),
@@ -106,7 +111,7 @@
 
 		_init: function() {
 			if (!this.created) { this._create(); } // bc for jqeury UI 1.7.2
-			this.button.disabled = true;
+			this._enableElement(this.button, false);
 		},
 
 		_destroy: function() {
@@ -270,7 +275,7 @@
 			});
 
 			this.canvas.append(item);
-			this.button.disabled = false;
+			this._enableElement(this.button);
 
 			this._previewFile(file, item);
 
@@ -306,7 +311,7 @@
 					this._next();
 				}
 			} else {
-				this.button.disabled = true;
+				this._enableElement(this.button, false);
 			}
 		},
 
@@ -337,7 +342,14 @@
 			}
 
 			this.queue.items = {};
-			this.button.disabled = true;
+			this._enableElement(this.button, false);
+		},
+
+		_enableElement: function(element, enable) {
+			if (enable !== false) { enable = true; }
+
+			element.disabled = !enable;
+			$(element).toggleClass('ui-state-disabled', !enable);
 		},
 
 		cancel: function() {
