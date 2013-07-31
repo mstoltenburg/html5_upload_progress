@@ -27,9 +27,5 @@ class html5_upload_progress_event_Core {
 		$group->checkbox("show_preview")
 		      ->label(t("Show file preview"))
 		      ->checked(false);
-
-		foreach ($form->inputs as $key => $input) {
-			error_log(print_r($input, 1));
-		}
 	}
 }

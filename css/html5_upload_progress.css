@@ -54,11 +54,25 @@
 #g-add-photos-canvas {
 	padding: 0;
 }
-#g-add-photos-canvas img {
+#g-add-photos-canvas .preview {
+	width: 2.4em;
 	height: 2.4em;
-	vertical-align: middle;
-	margin-right: .5em;
+	position: relative;
 	float: left;
+	margin-right: .5em;
+	background-color: rgba(0, 0, 0, .1);
+	-webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, .2);
+	        box-shadow: 0 0 0 1px rgba(0, 0, 0, .2);
+}
+#g-add-photos-canvas img {
+	max-width: 100%;
+	max-height: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
 }
 #g-add-photos-canvas {
 	height: auto;

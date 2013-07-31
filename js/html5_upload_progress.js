@@ -161,8 +161,7 @@
 				reader.onload = function (event) {
 					var image = new Image();
 					image.src = event.target.result;
-					image.height = 48; // a fake resize
-					item.prepend(image);
+					item.children('div').eq(0).append(image);
 				};
 
 				reader.readAsDataURL(file);
@@ -260,9 +259,10 @@
 			this.queue.count++;
 
 			var self = this,
+				thumb = (this.input.form.elements.show_preview.checked) ? '<div class="preview"></div>' : '',
 				progress = (tests.progress) ? '<progress min="0" max="100"></progress>' : '',
 				item = $('<li data-id="' + this.queue.count + '" class="g-info">' +
-				'<a class="close">&times;</a>' +
+				'<a class="close">&times;</a>' + thumb +
 				file.name + ' - ' + this._pimpMyBytes(file.size) +
 				progress +
 				'</li>');
