@@ -34,7 +34,7 @@
 	<label for="h5up-input"><?= t("Select photos (%size max per file)...", array("size" => html5_upload_progress::pimp_my_bytes($size_limit_bytes))) ?></label>
 	<input id="h5up-input" type="file" name="files[]" multiple="multiple" />
 	<div id="h5up-dropzone">
-		<p>Or drag an image from your desktop on to the drop zone.</p>
+		<p><?= t("Or drag images from your desktop on to this drop zone.") ?></p>
 	</div>
 
 	<ul id="g-add-photos-canvas" class="g-message-block"></ul>
