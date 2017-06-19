@@ -105,6 +105,22 @@
 					$(event.target).parent().remove();
 				}
 			});
+			
+			// Force page reload on button "Done" click
+			$(this.input.form).submit(function(e){
+				if(self.success > 0) {					
+					e.preventDefault();
+					window.location.reload();
+					return false;
+				}
+			});
+			
+			// Force page reload after closing the modal dialog
+			$('.ui-dialog-titlebar-close').click(function(e){
+				if(self.success > 0) {					
+					window.location.reload();
+				}
+			});
 
 			this.created = true;
 		},
